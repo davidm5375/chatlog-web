@@ -21,7 +21,7 @@ try {
 }
 if(!empty($report)):
 
-    $users_query = $pdo->prepare("SELECT DISTINCT(`name`) AS `name` FROM `test_reportmessages` WHERE `reportid` = ?");
+    $users_query = $pdo->prepare("SELECT DISTINCT(`name`) AS `name` FROM `reportmessages` WHERE `reportid` = ?");
     $users_query->execute(array($report));
 
     $users = array();
@@ -37,7 +37,7 @@ if(!empty($report)):
     }
     $usercount = count($users);
 
-    $msgcount_query = $pdo->prepare("SELECT COUNT(*) FROM `test_reportmessages` WHERE `reportid` = ?");
+    $msgcount_query = $pdo->prepare("SELECT COUNT(*) FROM `reportmessages` WHERE `reportid` = ?");
     $msgcount_query->execute(array($report));
     $msgcount_query = $msgcount_query->fetch();
     $msgcount = $msgcount_query['0'];
@@ -99,7 +99,7 @@ endif;
             <div class="panel-heading">
                 <h3 class="panel-title">
                     <?php
-                    $query = $pdo->prepare("SELECT * FROM `test_reportmessages` WHERE `reportid` = ?");
+                    $query = $pdo->prepare("SELECT * FROM `reportmessages` WHERE `reportid` = ?");
                     $query->execute(array($report));
                     $row = $query->fetch();
                     if(!empty($row)):
@@ -117,7 +117,7 @@ endif;
             <div class="panel-body" style="padding:5px;">
                 <?php
                 if(!empty($row)) {
-                    $query = $pdo->prepare("SELECT * FROM `test_reportmessages` WHERE `reportid` = ? ORDER BY `timestamp` ASC");
+                    $query = $pdo->prepare("SELECT * FROM `reportmessages` WHERE `reportid` = ? ORDER BY `timestamp` ASC");
                     $query->execute(array($report));
                     echo "<pre style='padding:6px; margin:6px;'>";
                     while($row = $query->fetch()) {
