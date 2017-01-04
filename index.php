@@ -2,8 +2,8 @@
 
 include('config.php');
 
-if(!empty($_GET)) {
-    if(!empty($_GET['report'])) {
+if (!empty($_GET)) {
+    if (!empty($_GET['report'])) {
         $report = $_GET['report'];
     }
 }
@@ -19,7 +19,7 @@ try {
     echo 'Couldn\'t connect to MySQL database! Make sure to edit config.php. <br>';
     echo $e->getMessage();
 }
-if(!empty($report)):
+if (!empty($report)):
 
     $users_query = $pdo->prepare("SELECT DISTINCT(`name`) AS `name` FROM `reportmessages` WHERE `reportid` = ?");
     $users_query->execute(array($report));
@@ -27,8 +27,8 @@ if(!empty($report)):
     $users = array();
     $names = array();
     while ($row = $users_query->fetch(PDO::FETCH_ASSOC)) {
-        $users[]= $row;
-        if(strlen($row['name']) > 20) {
+        $users[] = $row;
+        if (strlen($row['name']) > 20) {
             $data = json_decode(file_get_contents('http://api.minetools.eu/uuid/' . $row['name'] . ''), true);
             $names[$row['name']] = $data['name'];
         } else {
@@ -67,34 +67,7 @@ endif;
 </head>
 <body>
 <div class="container" style="padding-top:40px; padding-bottom:20px; max-width:1000px;">
-    <?php
-    if(!file_exists("config.php")) {
-        $errors = true;
-        $file = 'config.php';
-        $content = '<?php
-
-    $mysql_host = \'\';
-    $mysql_port = \'3306\';
-    $mysql_user = \'\';
-    $mysql_password = \'\';
-    $mysql_database = \'chatlog\';
-
-    $network_name = \'\';
-
-?>';
-
-        $fp = fopen($file, "w") or die("<div class=\"alert alert-danger\" role=\"alert\">Couldn't write config file! Make sure you have writing permission in this directory.</div>");
-        echo "<div class=\"alert alert-success\" role=\"success\">I just wrote a config file for you! Make sure to add your MySQL-Details now.</div>";
-        fwrite($fp, $content);
-
-        fclose($fp);
-    }
-
-    if(isset($errors) && $errors != false) {
-        exit();
-    }
-    ?>
-    <?php if(!empty($report)): ?>
+    <?php if (!empty($report)): ?>
         <div class="panel panel-default" style="margin:auto;">
             <div class="panel-heading">
                 <h3 class="panel-title">
@@ -102,11 +75,11 @@ endif;
                     $query = $pdo->prepare("SELECT * FROM `reportmessages` WHERE `reportid` = ?");
                     $query->execute(array($report));
                     $row = $query->fetch();
-                    if(!empty($row)):
-                        if($usercount > 1):
+                    if (!empty($row)):
+                        if ($usercount > 1):
                             echo $usercount . ' users - ' . $msgcount . ' messages - ' . date("d.m.Y", $row['timestamp']) . " - " . $row['server'];
                         else:
-                            echo '<img length="32" width="32" src="https://cravatar.eu/helmhead/'. htmlspecialchars($names[$row['name']]) . '/128.png">  ' . htmlspecialchars($names[$row['name']]) . " - " . date("d.m.Y", $row['timestamp']) . " - " . $row['server'];
+                            echo '<img length="32" width="32" src="https://cravatar.eu/helmhead/' . htmlspecialchars($names[$row['name']]) . '/128.png">  ' . htmlspecialchars($names[$row['name']]) . " - " . date("d.m.Y", $row['timestamp']) . " - " . $row['server'];
                         endif;
                     else:
                         echo "404 - Report not found";
@@ -116,16 +89,16 @@ endif;
             </div>
             <div class="panel-body" style="padding:5px;">
                 <?php
-                if(!empty($row)) {
+                if (!empty($row)) {
                     $query = $pdo->prepare("SELECT * FROM `reportmessages` WHERE `reportid` = ? ORDER BY `timestamp` ASC");
                     $query->execute(array($report));
                     echo "<pre style='padding:6px; margin:6px;'>";
-                    while($row = $query->fetch()) {
-                        echo "["  . date("H:i:s", $row['timestamp'])   . "] ";
+                    while ($row = $query->fetch()) {
+                        echo "[" . date("H:i:s", $row['timestamp']) . "] ";
                         //if($usercount > 1):
-                        echo '<img src="https://cravatar.eu/helmavatar/'. htmlspecialchars($names[$row['name']]) . '/14.png" alt=""> &lt;' . htmlspecialchars($names[$row['name']]) . "&gt; ";
+                        echo '<img src="https://cravatar.eu/helmavatar/' . htmlspecialchars($names[$row['name']]) . '/14.png" alt=""> &lt;' . htmlspecialchars($names[$row['name']]) . "&gt; ";
                         //endif;
-                        echo htmlspecialchars($row['message']).'<br>';
+                        echo htmlspecialchars($row['message']) . '<br>';
                     }
                     echo "</pre>";
                 } else {
