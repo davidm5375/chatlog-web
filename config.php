@@ -6,7 +6,7 @@ $mysql_user = '	mc59696';
 $mysql_password = 'b5caec2e82';
 $mysql_database = 'mc59696';
 
-$network_name = 'MobSpot';
+$network_name = 'mobspot.mcserver.us';
 
 
 ?>
